@@ -1,14 +1,25 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Brain, Zap, RefreshCw, ShieldCheck, Activity, ArrowRight, Lock, X, CheckCircle } from 'lucide-react';
+import {
+  Brain,
+  Activity,
+  ArrowRight,
+  X,
+  CheckCircle,
+  Play,
+  FlaskConical,
+  Target,
+  AlertTriangle,
+} from 'lucide-react';
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
-
+  const videosRef = useRef<HTMLElement>(null);
   const scienceRef = useRef<HTMLElement>(null);
+  const protocolRef = useRef<HTMLElement>(null);
 
   const scrollTo = (ref: React.RefObject<HTMLElement>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -30,14 +41,86 @@ export default function Home() {
     }, 2500);
   };
 
+  const videos = [
+    {
+      id: 'TOTW_bsKkbE',
+      episode: '01',
+      title: "Why Your Anxiety Isn't Broken",
+      description:
+        "The High Road / Low Road model of fear. Why your brain is doing exactly what it was designed to do — and why willpower and talk therapy can't reach the Low Road.",
+    },
+    {
+      id: 'eX1_yI7scug',
+      episode: '02',
+      title: 'The Mental Simulation Protocol',
+      description:
+        'The 6-step system for rewriting predictive codes at source. Intensity requirements, repetition thresholds, and the incompatible states principle.',
+    },
+    {
+      id: 'AipBMvDBw70',
+      episode: '03',
+      title: 'The Neuroscience of Why This Works',
+      description:
+        'Memory reconsolidation (Nader & LeDoux, 2000), predictive coding (Friston), and constructed emotion (Barrett). The peer-reviewed mechanisms behind the protocol.',
+    },
+    {
+      id: 'ieR3n0laLAg',
+      episode: '04',
+      title: 'Troubleshooting the Protocol',
+      description:
+        'The 5 failure modes, how to find the root prediction vs. surface trigger, Yerkes-Dodson intensity calibration, and adaptations for aphantasia.',
+    },
+  ];
+
+  const protocolSteps = [
+    {
+      number: '01',
+      title: 'Identify the Trigger',
+      description:
+        'Map the exact situation that activates the fear response. Not the emotion — the predictive code. Your brain fires this prediction before the event happens.',
+    },
+    {
+      number: '02',
+      title: 'Map the Prediction Error',
+      description:
+        "What outcome is your brain predicting? Fear is not a feeling — it's a forecast. You need the precise forecast to update it. Surface triggers mask root predictions.",
+    },
+    {
+      number: '03',
+      title: 'Design Incompatible Scenarios',
+      description:
+        "Create mental scenarios that make the fear prediction physically impossible. Not calm alternatives — viscerally, absurdly, over-the-top incompatible. Mild is useless.",
+    },
+    {
+      number: '04',
+      title: 'Run With Full Emotional Engagement',
+      description:
+        'The simulation must feel real to the amygdala. Calm visualization does nothing. Intensity is not optional — it is the mechanism. The Low Road updates on activation, not cognition.',
+    },
+    {
+      number: '05',
+      title: 'Repeat 50–100+ Times',
+      description:
+        'Your brain updates predictions through Bayesian weight-shifting. Single exposures do not move the needle. Repetition is how the new prediction gains enough predictive mass to displace the old one.',
+    },
+    {
+      number: '06',
+      title: 'Test in Real-World Exposure',
+      description:
+        'Controlled real-world re-exposure confirms the update. This is where reconsolidation is verified — and where you reclaim psychological sovereignty over the pattern.',
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-cyan-500/30">
 
-      {/* Email Capture Modal */}
+      {/* ── EMAIL CAPTURE MODAL ─────────────────────────────── */}
       {showModal && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm"
-          onClick={(e) => { if (e.target === e.currentTarget) setShowModal(false); }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowModal(false);
+          }}
         >
           <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full mx-6 relative shadow-2xl shadow-cyan-500/10">
             <button
@@ -46,12 +129,13 @@ export default function Home() {
             >
               <X className="w-5 h-5" />
             </button>
-
             {submitted ? (
               <div className="text-center py-8">
                 <CheckCircle className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-white mb-2">You're In.</h3>
-                <p className="text-slate-400">The full protocol is on its way to your inbox.</p>
+                <h3 className="text-2xl font-bold text-white mb-2">{"You're In."}</h3>
+                <p className="text-slate-400">
+                  The full protocol framework is on its way to your inbox.
+                </p>
               </div>
             ) : (
               <>
@@ -61,7 +145,9 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Get The Full Protocol</h3>
                 <p className="text-slate-400 mb-6 text-sm leading-relaxed">
-                  Enter your email and we'll send you the complete Pragmatic Psychology reprogramming framework — the 5-step system to update your body's predictive coding.
+                  The complete 6-step reprogramming framework as a PDF — including intensity
+                  calibration guide, failure mode checklist, and the reconsolidation protocol for
+                  CPTSD.
                 </p>
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <input
@@ -79,56 +165,93 @@ export default function Home() {
                     Send Me The Protocol <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
-                <p className="mt-4 text-xs text-slate-600 text-center">No spam. Unsubscribe anytime.</p>
+                <p className="mt-4 text-xs text-slate-600 text-center">
+                  No spam. Unsubscribe anytime.
+                </p>
               </>
             )}
           </div>
         </div>
       )}
 
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      {/* ── NAV ─────────────────────────────────────────────── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/60">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Brain className="w-6 h-6 text-cyan-400" />
-            <span className="font-bold tracking-tight text-white">Pragmatic Psychology</span>
+            <Brain className="w-5 h-5 text-cyan-400" />
+            <span className="font-bold text-white text-sm tracking-tight">
+              Pragmatic Psychology
+            </span>
+          </div>
+          <div className="hidden md:flex items-center gap-6 text-xs text-slate-400">
+            <button
+              onClick={() => scrollTo(videosRef)}
+              className="hover:text-white transition-colors"
+            >
+              The Series
+            </button>
+            <button
+              onClick={() => scrollTo(protocolRef)}
+              className="hover:text-white transition-colors"
+            >
+              The Protocol
+            </button>
+            <button
+              onClick={() => scrollTo(scienceRef)}
+              className="hover:text-white transition-colors"
+            >
+              The Science
+            </button>
           </div>
           <button
             onClick={openModal}
-            className="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg font-medium transition-all text-sm"
+            className="bg-cyan-500 hover:bg-cyan-400 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all"
           >
             Get the Protocol
           </button>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none" />
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-xs font-medium text-cyan-400 mb-6">
-            <Activity className="w-3 h-3" />
-            <span>Applied Neuroscience Framework</span>
+      {/* ── HERO ─────────────────────────────────────────────── */}
+      <section className="pt-32 pb-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-xs font-medium text-cyan-400 mb-8">
+            <Play className="w-3 h-3" />
+            <span>4-Part Video Series · Applied Neuroscience</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
-            You're Not Broken. <br />
-            You're Running <span className="text-cyan-400">Outdated Protection Protocols</span>.
+
+          <h1 className="text-5xl md:text-7xl font-black text-white leading-none tracking-tight mb-6">
+            Your Brain<br />
+            {"Isn't"} <span className="text-cyan-400">Broken.</span><br />
+            {"It's"} Running<br />
+            Outdated Software.
           </h1>
-          <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            You've analyzed your trauma. You understand your patterns. But your nervous system doesn't read your journal.
-            <br className="hidden md:block" />
-            Learn the neurobiological protocol to update your body's predictive coding directly.
+
+          <p className="text-xl text-slate-300 max-w-2xl leading-relaxed mb-4">
+            Fear, anxiety, and compulsive patterns are not malfunctions. They are prediction
+            codes — installed by experience, running automatically on the Low Road (amygdala)
+            before your conscious mind can intervene. The High Road (cortex) cannot overwrite
+            them through talk. But it can through simulation.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+          <p className="text-base text-slate-400 max-w-2xl leading-relaxed mb-10">
+            I eliminated a lifelong dog phobia and a bee phobia using nothing but mental
+            simulation. No therapist. No medication. No years of CBT. This series is the exact
+            mechanism — sourced from peer-reviewed neuroscience — explained in four videos.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4">
             <button
-              onClick={openModal}
-              className="bg-cyan-500 hover:bg-cyan-400 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"
+              onClick={() => scrollTo(videosRef)}
+              className="group bg-cyan-500 hover:bg-cyan-400 text-white font-bold px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
             >
-              Start The Reprogramming <ArrowRight className="w-5 h-5" />
+              <Play className="w-4 h-4" />
+              Watch Episode 1 Free
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
               onClick={() => scrollTo(scienceRef)}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-8 py-4 rounded-xl font-medium text-lg transition-all border border-slate-700"
+              className="border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white font-bold px-8 py-4 rounded-xl transition-all text-sm"
             >
               Read The Science
             </button>
@@ -136,98 +259,95 @@ export default function Home() {
         </div>
       </section>
 
-      {/* The Problem: System 1 vs System 2 */}
-      <section ref={scienceRef as React.RefObject<HTMLDivElement>} className="py-24 bg-slate-900 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-6">Why "Doing The Work" Hasn't Fixed It</h2>
-              <p className="text-slate-400 mb-6 leading-relaxed">
-                You understand your triggers. You've journaled. You rationally know you're safe. Yet your heart still races. Why?
+      {/* ── THE PROBLEM ──────────────────────────────────────── */}
+      <section className="py-20 px-6 bg-slate-900/40">
+        <div className="max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-medium text-orange-400 mb-8">
+            <AlertTriangle className="w-3 h-3" />
+            <span>{"Why Everything You've Tried Has Failed"}</span>
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight mb-8">
+            Therapy Talks to the Wrong<br />Part of Your Brain
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-slate-800/50 border border-red-900/40 rounded-2xl p-6">
+              <div className="text-xs font-bold text-red-400 uppercase tracking-widest mb-3">
+                The High Road (Cortex)
+              </div>
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                Conscious thought, language, logic, narrative. This is what therapy addresses. It
+                can recognize that a situation is objectively safe. It cannot make the amygdala
+                agree.
               </p>
-              <p className="text-slate-400 mb-8 leading-relaxed">
-                Because you have a <strong className="text-cyan-400">Mind-Body Lag</strong>. Your cortex (System 1) knows the truth, but your amygdala (System 2) is still running predictive models based on old trauma. Logic doesn't speak to the amygdala. Experience does.
+              <p className="text-red-400/80 text-xs">
+                {"↳ Talk therapy, CBT, journaling, affirmations — all High Road interventions. The High Road doesn't have write access to the Low Road."}
               </p>
-              <ul className="space-y-4">
-                {[
-                  "The High Road: Conscious, Logical, Slow (Updated via Therapy)",
-                  "The Low Road: Unconscious, Visceral, Fast (Updated via Experience)",
-                  "The Gap: Mental calm vs. Physical terror"
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-slate-300">
-                    <ShieldCheck className="w-5 h-5 text-cyan-500 mt-1 shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
-            <div className="bg-slate-950 p-8 rounded-2xl border border-slate-800 shadow-2xl relative">
-              <div className="absolute top-4 right-4 bg-red-500/10 text-red-400 text-xs px-2 py-1 rounded border border-red-500/20">
-                Low Road Alert
+
+            <div className="bg-slate-800/50 border border-cyan-900/40 rounded-2xl p-6">
+              <div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-3">
+                The Low Road (Amygdala)
               </div>
-              <div className="space-y-6 font-mono text-sm">
-                <div className="p-4 bg-slate-900 rounded border border-slate-800">
-                  <div className="text-slate-500 mb-1">// High Road (Cortex)</div>
-                  <div className="text-green-400">Status: SAFE</div>
-                  <div className="text-slate-400">"This email is not a threat."</div>
-                </div>
-                <div className="flex justify-center text-slate-600">↓ NO CONNECTION ↓</div>
-                <div className="p-4 bg-slate-900 rounded border border-red-900/30">
-                  <div className="text-slate-500 mb-1">// Low Road (Amygdala)</div>
-                  <div className="text-red-400 animate-pulse">Status: DANGER DETECTED</div>
-                  <div className="text-slate-400">Initiating fight-or-flight response...</div>
-                  <div className="text-slate-400">Heart rate: ELEVATED</div>
-                </div>
-              </div>
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                Subcortical, pre-conscious, faster than thought. This is where fear actually
+                lives — as a predictive code, not a memory. It fires before you can intervene.
+              </p>
+              <p className="text-cyan-400/80 text-xs">
+                {"↳ The Low Road can only be updated through reconsolidation — which requires emotional activation, not cognitive reframing."}
+              </p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* The Solution: Predictive Processing */}
-      <section className="py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">The Mechanism: Predictive Processing</h2>
-          <p className="text-slate-400 text-lg">
-            Your brain is a prediction machine. Anxiety is simply a prediction error. <br className="hidden md:block" />
-            <span className="text-cyan-400 font-mono">Threat Probability × Coping Capacity = Anxiety Response</span>
+          <p className="text-slate-400 text-lg leading-relaxed max-w-3xl">
+            Joseph LeDoux identified two fear pathways in 1996. The short route — thalamus
+            directly to amygdala — bypasses the cortex entirely. {"It's"} why you flinch before
+            you think. Talking about the flinch {"doesn't"} stop the flinch. Reprogramming the
+            prediction does.
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {[
-            { icon: RefreshCw, title: "Identify the Error", desc: "Pinpoint where your brain is overestimating threat or underestimating capacity based on past data." },
-            { icon: Zap, title: "Visceral Counter-Programming", desc: "Run intense, embodied simulations. If the trauma was loud, the cure cannot be quiet. Override the fear with dominance." },
-            { icon: Lock, title: "Reconsolidate Memory", desc: "Open the neural pathway and overwrite the fear response with a new experience of mastery." }
-          ].map((card, i) => (
-            <div key={i} className="bg-slate-900/50 p-8 rounded-xl border border-slate-800 hover:border-cyan-500/50 transition-all group">
-              <card.icon className="w-10 h-10 text-cyan-500 mb-6 group-hover:scale-110 transition-transform" />
-              <h3 className="text-xl font-bold text-white mb-3">{card.title}</h3>
-              <p className="text-slate-400 leading-relaxed">{card.desc}</p>
-            </div>
-          ))}
-        </div>
       </section>
 
-      {/* The Protocol Steps */}
-      <section className="py-24 bg-slate-900 px-6 border-y border-slate-800">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white">The Reprogramming Protocol</h2>
-            <p className="text-slate-400 mt-4">5 Steps to Psychological Sovereignty</p>
+      {/* ── THE VIDEO SERIES ─────────────────────────────────── */}
+      <section ref={videosRef as React.RefObject<HTMLDivElement>} className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-medium text-cyan-400 mb-6">
+              <Play className="w-3 h-3" />
+              <span>The Complete Series</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+              Four Videos. One Framework.
+            </h2>
+            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+              Watch in order. Each episode builds on the last. Episode 1 establishes the model.
+              Episode 4 is where most people fail — and where this framework separates from
+              everything else.
+            </p>
           </div>
-          <div className="space-y-8">
-            {[
-              { step: "01", title: "Identify the Prediction Error", desc: "Write out: 'My brain predicts X is dangerous. The reality is Y.'" },
-              { step: "02", title: "Separate Identity from State", desc: "You are not 'anxious'. You are a person whose system is running an anxiety loop." },
-              { step: "03", title: "Design Embodied Simulations", desc: "Create intense, visceral mental scenarios where you dominate the threat. Not calm—powerful." },
-              { step: "04", title: "Hebbian Wiring", desc: "Neurons that fire together, wire together. Manually build the new highway through high-frequency repetition." },
-              { step: "05", title: "Tolerate The Lag", desc: "Lead, don't follow. The physical fear is just residual momentum, not a signal of current truth." }
-            ].map((item, i) => (
-              <div key={i} className="flex gap-6 items-start p-6 bg-slate-950 rounded-xl border border-slate-800">
-                <div className="text-4xl font-black text-slate-800">{item.step}</div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-slate-400">{item.desc}</p>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {videos.map((video) => (
+              <div
+                key={video.id}
+                className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden"
+              >
+                <div className="aspect-video w-full bg-slate-950">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${video.id}`}
+                    title={video.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="text-5xl font-black text-slate-800 leading-none mb-3">
+                    {video.episode}
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">{video.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{video.description}</p>
                 </div>
               </div>
             ))}
@@ -235,31 +355,255 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-32 px-6 text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-cyan-900/10 to-slate-950 pointer-events-none" />
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Stop Managing Symptoms. <br />Start Rewiring Code.</h2>
-          <p className="text-xl text-slate-400 mb-10">
-            You don't need another therapist. You need to become the programmer of your own mind.
+      {/* ── THE 6-STEP PROTOCOL ──────────────────────────────── */}
+      <section
+        ref={protocolRef as React.RefObject<HTMLDivElement>}
+        className="py-20 px-6 bg-slate-900/40"
+      >
+        <div className="max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-medium text-cyan-400 mb-8">
+            <Target className="w-3 h-3" />
+            <span>The Mental Simulation Protocol</span>
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+            Six Steps to<br />Psychological Sovereignty
+          </h2>
+          <p className="text-slate-400 text-lg mb-12 max-w-2xl">
+            This is not a relaxation technique. It is not exposure therapy. It is a deliberate
+            rewrite of the prediction code using memory reconsolidation and Bayesian
+            weight-shifting.
           </p>
-          <button
-            onClick={openModal}
-            className="bg-white text-slate-950 hover:bg-slate-200 px-10 py-5 rounded-xl font-bold text-xl transition-all shadow-xl shadow-cyan-500/10"
-          >
-            Get The Full Framework
-          </button>
-          <p className="mt-6 text-sm text-slate-500">
-            Based on Applied Neuroscience & Memory Reconsolidation
-          </p>
+
+          <div className="space-y-4">
+            {protocolSteps.map((step) => (
+              <div
+                key={step.number}
+                className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex gap-6"
+              >
+                <div className="text-3xl font-black text-slate-700 leading-none shrink-0 w-10">
+                  {step.number}
+                </div>
+                <div>
+                  <h3 className="text-white font-bold mb-2">{step.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{step.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 bg-cyan-950/30 border border-cyan-900/40 rounded-2xl p-6">
+            <p className="text-cyan-300 text-sm leading-relaxed">
+              <span className="font-bold">Critical note on intensity:</span> The most common
+              failure mode is running the simulation too calmly. The amygdala does not update on
+              mild simulations. The emotional activation must be visceral, over-the-top, and
+              physically felt. If {"you're"} comfortable during the simulation, {"you're"} not
+              doing it correctly. Episode 4 covers all five failure modes in full.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-slate-800 text-center text-slate-600">
-        <p>© 2026 Pragmatic Psychology. All rights reserved.</p>
-      </footer>
+      {/* ── THE SCIENCE ──────────────────────────────────────── */}
+      <section ref={scienceRef as React.RefObject<HTMLDivElement>} className="py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-medium text-violet-400 mb-8">
+            <FlaskConical className="w-3 h-3" />
+            <span>Peer-Reviewed Mechanisms</span>
+          </div>
 
+          <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+            {"This Isn't Pseudoscience."}<br />
+            {"It's"} Applied Neuroscience.
+          </h2>
+          <p className="text-slate-400 text-lg mb-12 max-w-2xl">
+            Every claim in this framework is traceable to peer-reviewed research. Episode 3
+            walks through the full mechanistic case.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+              <div className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-3">
+                Memory Reconsolidation
+              </div>
+              <p className="text-white font-semibold mb-2">Karim Nader & Joseph LeDoux</p>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                2000{' '}
+                <em>Nature</em> paper demonstrated that consolidated fear memories become labile
+                upon reactivation — and can be rewritten before restabilizing. Fear is not
+                permanent. It is a file that can be opened and overwritten.
+              </p>
+            </div>
+
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+              <div className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-3">
+                Predictive Coding
+              </div>
+              <p className="text-white font-semibold mb-2">Karl Friston</p>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                The brain is not a passive receiver of sensation — it is a prediction machine
+                that models expected outcomes and fires in advance. Anxiety is a high-confidence
+                prediction, not a response to reality. The protocol targets the prediction
+                weight, not the sensation.
+              </p>
+            </div>
+
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+              <div className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-3">
+                Constructed Emotion
+              </div>
+              <p className="text-white font-semibold mb-2">Lisa Feldman Barrett</p>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Emotions are not hardwired reflexes — they are constructions, built from
+                interoceptive predictions and conceptual knowledge. This means they are
+                updatable. The emotional response you have today is not the one you are locked
+                into.
+              </p>
+            </div>
+
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+              <div className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-3">
+                Reconsolidation vs. Extinction
+              </div>
+              <p className="text-white font-semibold mb-2">
+                Daniela Schiller & Michelle Craske
+              </p>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Standard exposure therapy creates an extinction memory — a competing file that
+                suppresses but does not delete the fear. Reconsolidation rewrites the original
+                file. The difference is why exposure therapy produces relapse. This protocol
+                targets reconsolidation, not extinction.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── COMPARISON + FINAL CTA ───────────────────────────── */}
+      <section className="py-20 px-6 bg-slate-900/40">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
+            <div className="bg-slate-900 border border-red-900/30 rounded-2xl p-6">
+              <div className="text-xs font-bold text-red-400 uppercase tracking-widest mb-4">
+                Traditional Therapy
+              </div>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Targets the High Road
+                  (cortex)
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Builds extinction memories
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> High relapse rate
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Requires ongoing dependence
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Years of weekly sessions
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-slate-900 border border-red-900/30 rounded-2xl p-6">
+              <div className="text-xs font-bold text-red-400 uppercase tracking-widest mb-4">
+                Willpower / Mindset
+              </div>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Tries to suppress the Low
+                  Road
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Requires constant effort
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Collapses under stress
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Treats symptoms, not code
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-red-500 shrink-0">✕</span> Reinforces the belief{' '}
+                  {"you're"} broken
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-slate-900 border border-cyan-900/40 rounded-2xl p-6">
+              <div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-4">
+                This Protocol
+              </div>
+              <ul className="space-y-2 text-sm text-slate-300">
+                <li className="flex gap-2">
+                  <span className="text-cyan-400 shrink-0">✓</span> Targets the Low Road
+                  directly
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-cyan-400 shrink-0">✓</span> Rewrites the prediction code
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-cyan-400 shrink-0">✓</span> Self-administered — no
+                  therapist
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-cyan-400 shrink-0">✓</span> Reconsolidation, not
+                  extinction
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-cyan-400 shrink-0">✓</span> Durable results, not
+                  suppression
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-2xl md:text-3xl font-black text-white mb-2">
+              {"You don't need a therapist to fix you."}
+            </p>
+            <p className="text-slate-400 text-lg mb-8">
+              You need write access to the Low Road.
+            </p>
+            <button
+              onClick={openModal}
+              className="group bg-cyan-500 hover:bg-cyan-400 text-white font-bold px-10 py-5 rounded-xl transition-all inline-flex items-center justify-center gap-2 text-base"
+            >
+              Get The Full Protocol
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <p className="mt-4 text-xs text-slate-600">
+              Free. The complete 6-step framework + failure mode guide.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ───────────────────────────────────────────── */}
+      <footer className="py-12 px-6 border-t border-slate-800/60">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Brain className="w-4 h-4 text-cyan-400" />
+            <span className="text-slate-500 text-sm font-medium">Pragmatic Psychology</span>
+          </div>
+          <p className="text-slate-600 text-xs text-center">
+            This content is for educational purposes. Not a substitute for clinical care if you
+            are experiencing a mental health crisis.
+          </p>
+          <div className="flex items-center gap-4 text-xs text-slate-600">
+            <a
+              href="https://www.youtube.com/@Shem717"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-slate-400 transition-colors"
+            >
+              YouTube
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
